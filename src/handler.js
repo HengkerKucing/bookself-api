@@ -47,33 +47,101 @@ const addBooksHandler = (request, h) => {
     return response
   }
 }
-// const getAllNotesHandler = () => ({
-//   status: 'success',
-//   data: {
-//     books
-//   }
-// })
 
-// const getNoteByIdHandler = (request, h) => {
-//   const { id } = request.params
+const getAllBooksHandler = (request, h) => {
+  // const nameQuery = new RegExp(request.query.name, 'i')
+  // const { reading, finished } = request.query
 
-//   const note = books.filter((n) => n.id === id)[0]
+  // if (reading) {
+  //   const response = h.response({
+  //     status: 'success',
+  //     data: {
+  //       books: books
+  //         .filter((book) => book.reading === reading)
+  //         .map((book) => ({
+  //           id: book.id,
+  //           name: book.name,
+  //           publisher: book.publisher
+  //         }))
+  //     }
+  //   })
+  //   response.code(200)
+  //   return response
+  // }
 
-//   if (note !== undefined) {
-//     return {
-//       status: 'success',
-//       data: {
-//         note
-//       }
-//     }
-//   }
-//   const response = h.response({
-//     status: 'fail',
-//     message: 'Catatan tidak ditemukan'
-//   })
-//   response.code(404)
-//   return response
-// }
+  // if (finished) {
+  //   const response = h.response({
+  //     status: 'success',
+  //     data: {
+  //       books: books
+  //         .filter((book) => book.finished === finished)
+  //         .map((book) => ({
+  //           id: book.id,
+  //           name: book.name,
+  //           publisher: book.publisher
+  //         }))
+  //     }
+  //   })
+  //   response.code(200)
+  //   return response
+  // }
+
+  // if (nameQuery) {
+  //   const response = h.response({
+  //     status: 'success',
+  //     data: {
+  //       books: books
+  //         .filter((book) => nameQuery.test(book.name))
+  //         .map((book) => ({
+  //           id: book.id,
+  //           name: book.name,
+  //           publisher: book.publisher
+  //         }))
+  //     }
+  //   })
+
+  //   response.code(200)
+  //   return response
+  // }
+  const { id } = request.params
+  const isSuccess = books.filter((books) => books.id === id).length = 2
+
+  if (isSuccess) {
+    const response = h.response({
+      status: 'success',
+      data: {
+        books: books.map((book) => ({
+          id: book.id,
+          name: book.name,
+          publisher: book.publisher
+        }))
+      }
+    })
+    response.code(200)
+    return response
+  }
+}
+
+const getBookByIdHandler = (request, h) => {
+  const { id } = request.params
+
+  const note = books.filter((n) => n.id === id)[0]
+
+  if (note !== undefined) {
+    return {
+      status: 'success',
+      data: {
+        note
+      }
+    }
+  }
+  const response = h.response({
+    status: 'fail',
+    message: 'Catatan tidak ditemukan'
+  })
+  response.code(404)
+  return response
+}
 
 // const editNoteByHandler = (request, h) => {
 //   const { id } = request.params
@@ -130,9 +198,9 @@ const addBooksHandler = (request, h) => {
 // }
 
 module.exports = {
-  addBooksHandler
-  // getAllNotesHandler,
-  // getNoteByIdHandler,
+  addBooksHandler,
+  getAllBooksHandler,
+  getBookByIdHandler
   // editNoteByHandler,
   // deleteNoteByIdHandler
 }
