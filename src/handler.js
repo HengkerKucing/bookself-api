@@ -59,7 +59,24 @@ const addBooksHandler = (request, h) => {
 
 const getAllBooksHandler = (request, h) => {
   const { id } = request.params
-  const { name, reading, finished } = request.query
+  const { reading, finished } = request.query
+
+  // if (name) {
+  //   const response = h.response({
+  //     status: 'success',
+  //     data: {
+  //       books: books
+  //         .filter((r) => r.name === 'Dicoding')
+  //         .map((books) => ({
+  //           id: books.id,
+  //           name: books.name,
+  //           publisher: books.publisher
+  //         }))
+  //     }
+  //   })
+  //   response.code(200)
+  //   return response
+  // }
 
   if (reading === '1') {
     const response = h.response({
@@ -125,6 +142,26 @@ const getAllBooksHandler = (request, h) => {
           }))
       }
     })
+    response.code(200)
+    return response
+  }
+
+  const nameFilter = new RegExp(request.query.name, 'i')
+
+  if (nameFilter) {
+    const response = h.response({
+      status: 'success',
+      data: {
+        books: books
+          .filter((book) => nameFilter.test(book.name))
+          .map((book) => ({
+            id: book.id,
+            name: book.name,
+            publisher: book.publisher
+          }))
+      }
+    })
+
     response.code(200)
     return response
   }
