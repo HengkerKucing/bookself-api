@@ -59,7 +59,6 @@ const addBooksHandler = (request, h) => {
 
 const getAllBooksHandler = (request, h) => {
   const { id } = request.params
-  // const { reading } = request.query
   const isSuccess = books.filter((books) => books.id === id).length = 2
 
   if (isSuccess) {
@@ -103,38 +102,52 @@ const getBookByIdHandler = (request, h) => {
   return response
 }
 
-// const editNoteByHandler = (request, h) => {
-//   const { id } = request.params
+const editBookByHandler = (request, h) => {
+  const { id } = request.params
+  const { name, pageCount, readPage } = request.payload
 
-//   const { name, year, author } = request.payload
+  const bookId = books.filter((n) => n.id === id)[0]
 
-//   const updatedAt = new Date().toISOString()
-//   const index = books.findIndex((note) => note.id === id)
+  if (!name) {
+    const response = h.response({
+      status: 'fail',
+      message: 'Gagal memperbarui buku. Mohon isi nama buku'
+    })
+    response.code(400)
+    return response
+  }
 
-//   if (index !== -1) {
-//     books[index] = {
-//       ...books[index],
-//       name,
-// year     author,
-//       body,
-//       updatedAt
-//     }
-//     const response = h.response({
-//       status: 'success',
-//       message: 'Catatan berhasil diperbarui'
-//     })
-//     response.code(200)
-//     return response
-//   }
-//   const response = h.response({
-//     status: 'fail',
-//     message: 'Catatan gagal diperbarui'
-//   })
-//   response.code(404)
-//   return response
-// }
+  if (readPage > pageCount) {
+    const response = h.response({
+      status: 'fail',
+      message: 'Gagal memperbarui buku. readPage tidak boleh lebih besar dari pageCount'
+    })
+    response.code(400)
+    return response
+  }
 
-// const deleteNoteByIdHandler = (request, h) => {
+  if (bookId) {
+    const response = h.response(
+      {
+        status: 'success',
+        message: 'Buku berhasil diperbarui',
+        data: {
+          books
+        }
+      }
+    )
+    response.code(200)
+    return response
+  }
+  const response = h.response({
+    status: 'fail',
+    message: 'Gagal memperbarui buku. Id tidak ditemukan'
+  })
+  response.code(404)
+  return response
+}
+
+// const deleteBookByIdHandler = (request, h) => {
 //   const { id } = request.params
 
 //   const index = books.findIndex((note) => note.id === id)
@@ -160,7 +173,7 @@ const getBookByIdHandler = (request, h) => {
 module.exports = {
   addBooksHandler,
   getAllBooksHandler,
-  getBookByIdHandler
-  // editNoteByHandler,
-  // deleteNoteByIdHandler
+  getBookByIdHandler,
+  editBookByHandler
+  // deleteBookByIdHandler
 }
