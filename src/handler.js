@@ -2,7 +2,7 @@ const { nanoid } = require('nanoid')
 const books = require('./books')
 
 const addBooksHandler = (request, h) => {
-  const { name, year, author, summary, publisher, pageCount, readPage } = request.payload
+  const { name, year, author, summary, publisher, pageCount, readPage, reading } = request.payload
 
   const id = nanoid(16)
   const insertedAt = new Date().toISOString()
@@ -25,16 +25,6 @@ const addBooksHandler = (request, h) => {
     response.code(400)
     return response
   }
-  const isReading = (readPage, pageCount) => {
-    if (readPage > 0) {
-      return true
-    } else if (readPage === pageCount) {
-      return false
-    } else {
-      return false
-    }
-  }
-  const reading = isReading(readPage)
 
   const isFinished = (pageCount, readPage) => {
     if (pageCount === readPage) {
