@@ -61,23 +61,6 @@ const getAllBooksHandler = (request, h) => {
   const { id } = request.params
   const { reading, finished } = request.query
 
-  // if (name) {
-  //   const response = h.response({
-  //     status: 'success',
-  //     data: {
-  //       books: books
-  //         .filter((r) => r.name === 'Dicoding')
-  //         .map((books) => ({
-  //           id: books.id,
-  //           name: books.name,
-  //           publisher: books.publisher
-  //         }))
-  //     }
-  //   })
-  //   response.code(200)
-  //   return response
-  // }
-
   if (reading === '1') {
     const response = h.response({
       status: 'success',
@@ -211,9 +194,7 @@ const getBookByIdHandler = (request, h) => {
 
 const editBookByHandler = (request, h) => {
   const { id } = request.params
-  const { name, pageCount, readPage } = request.payload
-
-  const bookId = books.filter((n) => n.id === id)[0]
+  const { name, year, author, summary, publisher, pageCount, readPage, reading } = request.payload
 
   if (!name) {
     const response = h.response({
@@ -233,7 +214,20 @@ const editBookByHandler = (request, h) => {
     return response
   }
 
-  if (bookId) {
+  const bookId = books.findIndex((book) => book.id === id)
+
+  if (bookId !== -1) {
+    books[bookId] = {
+      ...books[bookId],
+      name,
+      year,
+      author,
+      summary,
+      publisher,
+      pageCount,
+      readPage,
+      reading
+    }
     const response = h.response(
       {
         status: 'success',
@@ -246,6 +240,7 @@ const editBookByHandler = (request, h) => {
     response.code(200)
     return response
   }
+
   const response = h.response({
     status: 'fail',
     message: 'Gagal memperbarui buku. Id tidak ditemukan'
